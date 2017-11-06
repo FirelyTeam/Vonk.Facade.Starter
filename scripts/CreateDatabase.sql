@@ -55,6 +55,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE [dbo].[BloodPressure](
+	[Id] [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
 	[PatientId] [int] NOT NULL FOREIGN KEY REFERENCES [dbo].[Patient](Id),
 	[MeasuredAt] [datetime] NOT NULL,
 	[Systolic] [int] NOT NULL,
@@ -80,18 +81,22 @@ GO
 
 USE [ViSi]
 GO
-INSERT [dbo].[BloodPressure] ([PatientId], [MeasuredAt], [Systolic], [Diastolic]) VALUES (1, CAST(N'2016-03-01T09:30:00.000' AS DateTime), 140, 90)
+SET IDENTITY_INSERT [dbo].[BloodPressure] ON 
 GO
-INSERT [dbo].[BloodPressure] ([PatientId], [MeasuredAt], [Systolic], [Diastolic]) VALUES (1, CAST(N'2016-04-01T10:15:00.000' AS DateTime), 130, 80)
+INSERT [dbo].[BloodPressure] ([Id], [PatientId], [MeasuredAt], [Systolic], [Diastolic]) VALUES (1, 1, CAST(N'2016-03-01T09:30:00.000' AS DateTime), 140, 90)
 GO
-INSERT [dbo].[BloodPressure] ([PatientId], [MeasuredAt], [Systolic], [Diastolic]) VALUES (2, CAST(N'2016-05-02T11:20:00.000' AS DateTime), 120, 80)
+INSERT [dbo].[BloodPressure] ([Id], [PatientId], [MeasuredAt], [Systolic], [Diastolic]) VALUES (2, 1, CAST(N'2016-04-01T10:15:00.000' AS DateTime), 130, 80)
 GO
-INSERT [dbo].[BloodPressure] ([PatientId], [MeasuredAt], [Systolic], [Diastolic]) VALUES (2, CAST(N'2016-06-02T09:20:00.000' AS DateTime), 110, 80)
+INSERT [dbo].[BloodPressure] ([Id], [PatientId], [MeasuredAt], [Systolic], [Diastolic]) VALUES (3, 2, CAST(N'2016-05-02T11:20:00.000' AS DateTime), 120, 80)
 GO
-INSERT [dbo].[BloodPressure] ([PatientId], [MeasuredAt], [Systolic], [Diastolic]) VALUES (3, CAST(N'2016-05-28T09:55:00.000' AS DateTime), 100, 60)
+INSERT [dbo].[BloodPressure] ([Id], [PatientId], [MeasuredAt], [Systolic], [Diastolic]) VALUES (4, 2, CAST(N'2016-06-02T09:20:00.000' AS DateTime), 110, 80)
 GO
-INSERT [dbo].[BloodPressure] ([PatientId], [MeasuredAt], [Systolic], [Diastolic]) VALUES (3, CAST(N'2016-05-29T09:50:00.000' AS DateTime), 105, 65)
+INSERT [dbo].[BloodPressure] ([Id], [PatientId], [MeasuredAt], [Systolic], [Diastolic]) VALUES (5, 3, CAST(N'2016-05-28T09:55:00.000' AS DateTime), 100, 60)
 GO
-INSERT [dbo].[BloodPressure] ([PatientId], [MeasuredAt], [Systolic], [Diastolic]) VALUES (3, CAST(N'2016-05-30T09:50:00.000' AS DateTime), 110, 67)
+INSERT [dbo].[BloodPressure] ([Id], [PatientId], [MeasuredAt], [Systolic], [Diastolic]) VALUES (6, 3, CAST(N'2016-05-29T09:50:00.000' AS DateTime), 105, 65)
+GO
+INSERT [dbo].[BloodPressure] ([Id], [PatientId], [MeasuredAt], [Systolic], [Diastolic]) VALUES (7, 3, CAST(N'2016-05-30T09:50:00.000' AS DateTime), 110, 67)
+GO
+SET IDENTITY_INSERT [dbo].[BloodPressure] OFF 
 GO
 
