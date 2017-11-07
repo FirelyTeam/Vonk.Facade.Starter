@@ -33,12 +33,8 @@ namespace Vonk.Facade.Starter
         {
             services.AddSingleton(_configurationRoot)
                 .AddApiContextServices()
-                .AddLicenseService()
-                .AddPluggabilityServices()
-                .AddContextServices()
-                .AddConformanceService()
+                .AddVonkMinimalServices()
                 .AllowResourceTypes("Patient")
-                //.AddCoreServices()
             ;
         }
 
@@ -51,9 +47,7 @@ namespace Vonk.Facade.Starter
             }
 
             app
-                .UseContext()
-                .UseConformance()
-                //.UseVonkCore()
+                .UseVonkMinimal()
             ;
         }
     }
