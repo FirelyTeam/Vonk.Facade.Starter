@@ -19,7 +19,11 @@ namespace Vonk.Facade.Starter
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
+             .ConfigureLogging((hostingContext, logging) =>
+             {
+                 logging.SetMinimumLevel(LogLevel.Trace);
+             })
+            .UseStartup<Startup>()
                 .Build();
     }
 }

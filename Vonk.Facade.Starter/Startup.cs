@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Vonk.Core.Configuration;
-using Microsoft.Extensions.Configuration;
-using Vonk.Model.FromApi;
-using Vonk.Core.Context;
-using Vonk.Core.Operations.Capability;
-using Vonk.Core.Licensing;
+using Vonk.Fhir.R3;
 using Vonk.Core.Pluggability;
+using Vonk.Core.Operations.Validation;
+using Vonk.Core.Operations.Search;
+using Vonk.Core.Repository;
 
 namespace Vonk.Facade.Starter
 {
@@ -32,9 +27,13 @@ namespace Vonk.Facade.Starter
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(_configurationRoot)
-                .AddApiContextServices()
+                .AddFhirServices()
                 .AddVonkMinimalServices()
+                .AddSearchServices()
+                .AddRepositorySearchServices()
+                .AddViSiServices()
                 .AllowResourceTypes("Patient")
+            //.AddValidationServices() //TODO: Get the specification.zip through
             ;
         }
 
@@ -48,6 +47,8 @@ namespace Vonk.Facade.Starter
 
             app
                 .UseVonkMinimal()
+                .UseSearch()
+            //.UseValidation()
             ;
         }
     }
