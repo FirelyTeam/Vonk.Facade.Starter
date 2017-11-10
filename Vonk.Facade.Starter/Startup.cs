@@ -8,6 +8,7 @@ using Vonk.Core.Pluggability;
 using Vonk.Core.Operations.Validation;
 using Vonk.Core.Operations.Search;
 using Vonk.Core.Repository;
+using Vonk.Core.Operations.Crud;
 
 namespace Vonk.Facade.Starter
 {
@@ -30,10 +31,12 @@ namespace Vonk.Facade.Starter
                 .AddFhirServices()
                 .AddVonkMinimalServices()
                 .AddSearchServices()
+                .AddReadServices()
                 .AddRepositorySearchServices()
                 .AddViSiServices()
                 .AllowResourceTypes("Patient")
-            //.AddValidationServices() //TODO: Get the specification.zip through
+                .AddInstanceValidationServices()
+                .AddValidationServices() 
             ;
         }
 
@@ -48,7 +51,9 @@ namespace Vonk.Facade.Starter
             app
                 .UseVonkMinimal()
                 .UseSearch()
-            //.UseValidation()
+                .UseRead()
+                .UseValidation()
+                .UseInstanceValidation()
             ;
         }
     }
