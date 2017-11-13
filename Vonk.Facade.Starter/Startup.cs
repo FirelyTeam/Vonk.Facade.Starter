@@ -32,7 +32,6 @@ namespace Vonk.Facade.Starter
                 .AddVonkMinimalServices()
                 .AddSearchServices()
                 .AddReadServices()
-                .AddRepositorySearchServices()
                 .AddViSiServices()
                 .AllowResourceTypes("Patient", "Observation")
                 .AddInstanceValidationServices()
