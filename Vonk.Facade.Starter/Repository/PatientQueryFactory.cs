@@ -1,4 +1,5 @@
 ﻿using LinqKit;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace Vonk.Facade.Starter.Repository
 
     public class PatientQueryFactory : RelationalQueryFactory<ViSiPatient, PatientQuery>
     {
-        public PatientQueryFactory() : base("Patient") { }
+        public PatientQueryFactory(DbContext onContext) : base("Patient", onContext) { }
 
         public override PatientQuery AddValueFilter(string parameterName, TokenValue value)
         {
@@ -42,10 +43,10 @@ namespace Vonk.Facade.Starter.Repository
         {
             if (parameterName == "subject" && value.Source == "Observation")
             {
-                var obsQuery = value.CreateQuery(new BPQueryFactory());
-                return PredicateQuery(p => p.BloodPressure.Any(obsQuery.Predicate.Compile()));
-                //var observations = obsQuery.Execute()
-                //return ChainQuery(obsQuery, (p, bps) => bps.Select(bp => bp.PatientId).Contains(p.Id));
+                var obsQuery = value.CreateQuery(new BPQueryFactory(OnContext));
+                var obsIds = obsQuery.Execute(OnContext).Select(bp => bp.PatientId);
+
+                return PredicateQuery(p => obsIds.Contains(p.Id));
             }
             return base.AddValueFilter(parameterName, value);
         }
@@ -53,7 +54,7 @@ namespace Vonk.Facade.Starter.Repository
 
     public class BPQueryFactory : RelationalQueryFactory<ViSiBloodPressure, BloodPressureQuery>
     {
-        public BPQueryFactory() : base("Observation") { }
+        public BPQueryFactory(DbContext onContext) : base("Observation", onContext) { }
 
         public override BloodPressureQuery AddValueFilter(string parameterName, TokenValue value)
         {
@@ -67,6 +68,18 @@ namespace Vonk.Facade.Starter.Repository
                 {
                     return PredicateQuery(vp => vp.Id == bpId);
                 }
+            }
+            return base.AddValueFilter(parameterName, value);
+        }
+
+        public override BloodPressureQuery AddValueFilter(string parameterName, ReferenceToValue value)
+        {
+            if (parameterName == "subject" && value.Targets.Contains("Patient"))
+            {
+                var patientQuery = value.CreateQuery(new PatientQueryFactory(OnContext));
+                var patIds = patientQuery.Execute(OnContext).Select(p => p.Id);
+
+                return PredicateQuery(bp => patIds.Contains(bp.PatientId));
             }
             return base.AddValueFilter(parameterName, value);
         }

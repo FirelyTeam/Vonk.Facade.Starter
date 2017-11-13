@@ -40,7 +40,7 @@ namespace Vonk.Facade.Starter.Repository
 
         private async Task<SearchResult> SearchPatient(IArgumentCollection arguments, SearchOptions options)
         {
-            var query = _queryBuilderContext.CreateQuery(new PatientQueryFactory(), arguments, options);
+            var query = _queryBuilderContext.CreateQuery(new PatientQueryFactory(_visiContext), arguments, options);
 
             var count = await query.ExecuteCount(_visiContext);
             var patientResources = new List<IResource>();
@@ -58,7 +58,7 @@ namespace Vonk.Facade.Starter.Repository
 
         private async Task<SearchResult> SearchObservation(IArgumentCollection arguments, SearchOptions options)
         {
-            var query = _queryBuilderContext.CreateQuery(new BPQueryFactory(), arguments, options);
+            var query = _queryBuilderContext.CreateQuery(new BPQueryFactory(_visiContext), arguments, options);
 
             var count = await query.ExecuteCount(_visiContext);
             var observationResources = new List<IResource>();
