@@ -30,12 +30,6 @@ namespace Vonk.Facade.Starter
             services.AddSingleton(_configurationRoot)
                 .AddFhirServices()
                 .AddVonkMinimalServices()
-                .AddSearchServices()
-                .AddReadServices()
-                .AddViSiServices()
-                .AllowResourceTypes("Patient", "Observation")
-                .AddInstanceValidationServices()
-                .AddValidationServices() 
             ;
         }
 
@@ -49,10 +43,6 @@ namespace Vonk.Facade.Starter
 
             app
                 .UseVonkMinimal()
-                .UseSearch()
-                .UseRead()
-                .UseValidation()
-                .UseInstanceValidation()
             ;
         }
     }
