@@ -31,11 +31,8 @@ namespace Vonk.Facade.Starter
                 .AddFhirServices()
                 .AddVonkMinimalServices()
                 .AddSearchServices()
-                .AddReadServices()
                 .AddViSiServices()
-                .AllowResourceTypes("Patient", "Observation")
-                .AddInstanceValidationServices()
-                .AddValidationServices() 
+                .AllowResourceTypes("Patient")
             ;
         }
 
@@ -50,9 +47,6 @@ namespace Vonk.Facade.Starter
             app
                 .UseVonkMinimal()
                 .UseSearch()
-                .UseRead()
-                .UseValidation()
-                .UseInstanceValidation()
             ;
         }
     }
