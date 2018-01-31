@@ -9,6 +9,7 @@ using Vonk.Core.Operations.Validation;
 using Vonk.Core.Operations.Search;
 using Vonk.Core.Repository;
 using Vonk.Core.Operations.Crud;
+using Vonk.Smart;
 
 namespace Vonk.Facade.Starter
 {
@@ -29,14 +30,15 @@ namespace Vonk.Facade.Starter
         {
             services.AddSingleton(_configurationRoot)
                 .AddFhirServices()
+                .AddSmartServices()
                 .AddVonkMinimalServices()
                 .AddSearchServices()
                 .AddReadServices()
                 .AddViSiServices()
                 .AllowResourceTypes("Patient", "Observation")
                 .AddInstanceValidationServices()
-                .AddValidationServices() 
-            ;
+                .AddValidationServices()
+             ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +51,7 @@ namespace Vonk.Facade.Starter
 
             app
                 .UseVonkMinimal()
+                .UseSmartAuthorization()
                 .UseSearch()
                 .UseRead()
                 .UseValidation()
