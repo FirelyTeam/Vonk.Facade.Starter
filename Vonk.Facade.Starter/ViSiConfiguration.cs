@@ -1,8 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Vonk.Core.Repository;
 using Vonk.Facade.Starter.Models;
 using Vonk.Facade.Starter.Repository;
@@ -16,6 +13,9 @@ namespace Vonk.Facade.Starter
             services.AddDbContext<ViSiContext>();
             services.AddSingleton<ResourceMapper>();
             services.AddScoped<ISearchRepository, ViSiRepository>();
+
+            var sp = services.BuildServiceProvider();
+            services.Configure<DbOptions>(sp.GetRequiredService<IConfiguration>().GetSection(nameof(DbOptions)));
             return services;
         }
     }
