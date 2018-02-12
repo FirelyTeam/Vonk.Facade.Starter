@@ -1,11 +1,16 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Vonk.Facade.Starter.Models
 {
     public partial class ViSiContext : DbContext
     {
+        private readonly IOptions<DbOptions> _dbOptionsAccessor;
+
+        public ViSiContext(IOptions<DbOptions> dbOptionsAccessor)
+        {
+            _dbOptionsAccessor = dbOptionsAccessor;
+        }
         public virtual DbSet<ViSiBloodPressure> BloodPressure { get; set; }
         public virtual DbSet<ViSiPatient> Patient { get; set; }
 
@@ -13,8 +18,7 @@ namespace Vonk.Facade.Starter.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer(@"MultipleActiveResultSets=true;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=ViSi;Data Source=DUSSEL\SQL2016");
+                optionsBuilder.UseSqlServer(_dbOptionsAccessor.Value.ConnectionString);
             }
         }
 
