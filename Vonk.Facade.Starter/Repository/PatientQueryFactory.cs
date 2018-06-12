@@ -28,6 +28,10 @@ namespace Vonk.Facade.Starter.Repository
                     return PredicateQuery(vp => vp.Id == patientId);
                 }
             }
+            else if (parameterName == "identifier")
+            {
+                return PredicateQuery(vp => vp.PatientNumber == value.Code);
+            }
             return base.AddValueFilter(parameterName, value);
         }
 
