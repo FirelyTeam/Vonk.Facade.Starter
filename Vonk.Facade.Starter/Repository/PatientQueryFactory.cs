@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Hl7.Fhir.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 using Vonk.Core.Repository;
 using Vonk.Facade.Relational;
 using Vonk.Facade.Starter.Models;
+using static Vonk.Core.Context.VonkConstants;
 
 namespace Vonk.Facade.Starter.Repository
 {
@@ -13,11 +16,11 @@ namespace Vonk.Facade.Starter.Repository
 
     public class PatientQueryFactory : RelationalQueryFactory<ViSiPatient, PatientQuery>
     {
-        public PatientQueryFactory(DbContext onContext) : base("Patient", onContext) { }
+        public PatientQueryFactory(DbContext onContext) : base(nameof(Patient), onContext) { }
 
         public override PatientQuery AddValueFilter(string parameterName, TokenValue value)
         {
-            if (parameterName == "_id")
+            if (parameterName == ParameterNames.Id)
             {
                 if (!long.TryParse(value.Code, out long patientId))
                 {
@@ -37,7 +40,7 @@ namespace Vonk.Facade.Starter.Repository
 
         public override PatientQuery AddValueFilter(string parameterName, ReferenceFromValue value)
         {
-            if (parameterName == "subject" && value.Source == "Observation")
+            if (parameterName == "subject" && value.Source == nameof(Observation))
             {
                 var obsQuery = value.CreateQuery(new BPQueryFactory(OnContext));
                 var obsIds = obsQuery.Execute(OnContext).Select(bp => bp.PatientId);

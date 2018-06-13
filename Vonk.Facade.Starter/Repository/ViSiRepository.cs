@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Hl7.Fhir.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,9 +30,9 @@ namespace Vonk.Facade.Starter.Repository
         {
             switch (resourceType)
             {
-                case "Patient":
+                case nameof(Patient):
                     return await SearchPatient(arguments, options);
-                case "Observation":
+                case nameof(Observation):
                     return await SearchObservation(arguments, options);
                 default:
                     throw new NotImplementedException($"ResourceType {resourceType} is not supported.");
