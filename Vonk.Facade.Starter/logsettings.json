@@ -1,0 +1,21 @@
+﻿{
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Error",
+      "Override": {
+        "Vonk.Configuration": "Information",
+        "Vonk.Core.Licensing": "Information",
+        "Vonk": "Warning"
+      }
+    },
+    "WriteTo": [
+      { "Name": "ColoredConsole" },
+      { "Name": "RollingFile", "Args": { "pathFormat": "c:/temp/vonk-{Date}.log" } }
+    ],
+    "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ],
+    "Properties": {
+      "Application": "Vonk",
+      "Environment": "Default"
+    }
+  }
+}
