@@ -13,10 +13,10 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.1" />
-    <PackageReference Include="Vonk.Core" Version="0.7.0-beta" />
-    <PackageReference Include="Vonk.Facade.Relational" Version="0.7.0-beta" />
-    <PackageReference Include="Vonk.Fhir.R3" Version="0.7.0-beta" />
-    <PackageReference Include="Vonk.Smart" Version="0.7.0-beta" />
+    <PackageReference Include="Vonk.Core" Version="0.7.0-alpha842" />
+    <PackageReference Include="Vonk.Facade.Relational" Version="0.7.0-alpha842" />
+    <PackageReference Include="Vonk.Fhir.R3" Version="0.7.0-alpha842" />
+    <PackageReference Include="Vonk.Smart" Version="0.7.0-alpha842" />
   </ItemGroup>
 
 </Project>
