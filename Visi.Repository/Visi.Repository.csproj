@@ -1,23 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Hl7.Fhir.Specification.STU3" Version="0.96.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.1" />
     <PackageReference Include="Vonk.Core" Version="0.7.0-beta" />
     <PackageReference Include="Vonk.Facade.Relational" Version="0.7.0-beta" />
     <PackageReference Include="Vonk.Fhir.R3" Version="0.7.0-beta" />
     <PackageReference Include="Vonk.Smart" Version="0.7.0-beta" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Visi.Repository\Visi.Repository.csproj" />
   </ItemGroup>
 
 </Project>

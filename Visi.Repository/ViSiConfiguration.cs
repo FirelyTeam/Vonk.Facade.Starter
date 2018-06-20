@@ -1,21 +1,21 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Visi.Repository.Models;
+using Vonk.Core.Pluggability;
 using Vonk.Core.Repository;
-using Vonk.Facade.Starter.Models;
-using Vonk.Facade.Starter.Repository;
 
-namespace Vonk.Facade.Starter
+namespace Visi.Repository
 {
+    [VonkConfiguration(order: 240)]
     public static class ViSiConfiguration
     {
-        public static IServiceCollection AddViSiServices(this IServiceCollection services)
+        public static IServiceCollection AddViSiServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ViSiContext>();
             services.AddSingleton<ResourceMapper>();
             services.AddScoped<ISearchRepository, ViSiRepository>();
 
-            var sp = services.BuildServiceProvider();
-            services.Configure<DbOptions>(sp.GetRequiredService<IConfiguration>().GetSection(nameof(DbOptions)));
+            services.Configure<DbOptions>(configuration.GetSection(nameof(DbOptions)));
             return services;
         }
     }

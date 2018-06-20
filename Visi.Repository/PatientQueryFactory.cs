@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using Visi.Repository.Models;
 using Vonk.Core.Repository;
 using Vonk.Facade.Relational;
-using Vonk.Facade.Starter.Models;
 
-namespace Vonk.Facade.Starter.Repository
+namespace Visi.Repository
 {
     public class PatientQuery : RelationalQuery<ViSiPatient>
     {

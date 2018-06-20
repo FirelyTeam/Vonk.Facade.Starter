@@ -8,9 +8,9 @@ using Vonk.Core.Context;
 using Vonk.Core.Repository;
 using Vonk.Core.Support;
 using Vonk.Facade.Relational;
-using Vonk.Facade.Starter.Models;
+using Visi.Repository.Models;
 
-namespace Vonk.Facade.Starter.Repository
+namespace Visi.Repository
 {
     public class ViSiRepository : SearchRepository
     {

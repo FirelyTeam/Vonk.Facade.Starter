@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vonk.Facade.Starter", "Vonk.Facade.Starter\Vonk.Facade.Starter.csproj", "{02F27CD7-51B8-4A57-BC76-EBD058CE8323}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vonk.Facade.Starter", "Vonk.Facade.Starter\Vonk.Facade.Starter.csproj", "{02F27CD7-51B8-4A57-BC76-EBD058CE8323}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visi.Repository", "Visi.Repository\Visi.Repository.csproj", "{BA6D4B0C-8B75-416B-8282-7CE733B63E39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{02F27CD7-51B8-4A57-BC76-EBD058CE8323}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02F27CD7-51B8-4A57-BC76-EBD058CE8323}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02F27CD7-51B8-4A57-BC76-EBD058CE8323}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA6D4B0C-8B75-416B-8282-7CE733B63E39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA6D4B0C-8B75-416B-8282-7CE733B63E39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA6D4B0C-8B75-416B-8282-7CE733B63E39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA6D4B0C-8B75-416B-8282-7CE733B63E39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

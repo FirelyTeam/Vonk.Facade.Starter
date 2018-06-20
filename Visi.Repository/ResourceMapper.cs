@@ -1,10 +1,10 @@
 ﻿using Hl7.Fhir.Model;
 using Vonk.Core.Common;
 using Vonk.Core.Context;
-using Vonk.Facade.Starter.Models;
+using Visi.Repository.Models;
 using Vonk.Fhir.R3;
 
-namespace Vonk.Facade.Starter.Repository
+namespace Visi.Repository
 {
     public class ResourceMapper
     {

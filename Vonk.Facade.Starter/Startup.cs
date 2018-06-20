@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Visi.Repository;
 using Vonk.Core.Configuration;
 using Vonk.Core.Operations.Crud;
 using Vonk.Core.Operations.Search;
@@ -34,7 +35,7 @@ namespace Vonk.Facade.Starter
                 .AddVonkMinimalServices()
                 .AddSearchServices()
                 .AddReadServices()
-                .AddViSiServices()
+                .AddViSiServices(_configuration)
                 .AllowResourceTypes("Patient", "Observation")
                 .AddInstanceValidationServices(_configuration)
                 .AddValidationServices(_configuration)
