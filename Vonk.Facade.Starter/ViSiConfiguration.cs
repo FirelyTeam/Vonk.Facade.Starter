@@ -13,6 +13,7 @@ namespace Vonk.Facade.Starter
             services.AddDbContext<ViSiContext>();
             services.AddSingleton<ResourceMapper>();
             services.AddScoped<ISearchRepository, ViSiRepository>();
+            services.AddScoped<IResourceChangeRepository, ViSiChangeRepository>();
 
             var sp = services.BuildServiceProvider();
             services.Configure<DbOptions>(sp.GetRequiredService<IConfiguration>().GetSection(nameof(DbOptions)));
