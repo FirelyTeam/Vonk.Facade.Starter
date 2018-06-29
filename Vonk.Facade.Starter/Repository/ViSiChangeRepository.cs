@@ -69,12 +69,24 @@ namespace Vonk.Facade.Starter.Repository
 
         public async Task<IResource> DeletePatient(ResourceKey toDelete)
         {
-            var visiPatient = _visiContext.Patient.Find(int.Parse(toDelete.ResourceId));
+            int toDelete_id = int.Parse(toDelete.ResourceId);
+            var visiPatient = _visiContext.Patient.Find(toDelete_id);
 
-            var px = _visiContext.Patient.Remove(visiPatient);
-            await _visiContext.SaveChangesAsync();
+            var bpEntries = _visiContext.BloodPressure.Where(bp => bp.PatientId == toDelete_id);
+            if (!bpEntries.IsNullOrEmpty())
+                throw new VonkRepositoryException($"Error on deleting Patient with Id {toDelete_id}: the patient has related Observations");
 
-            return _resourceMapper.MapPatient(px.Entity);
+            try
+            {
+                _visiContext.Patient.Remove(visiPatient);
+                await _visiContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new VonkRepositoryException($"Error on deleting Patient with Id {toDelete_id}", ex);
+            }
+
+            return _resourceMapper.MapPatient(visiPatient);
         }
 
         public async Task<IResource> DeleteObservation(ResourceKey toDelete)
