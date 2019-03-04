@@ -1,14 +1,18 @@
 ﻿using Hl7.Fhir.Model;
+using Hl7.Fhir.Rest;
 using Vonk.Core.Common;
 using Vonk.Core.Context;
 using Visi.Repository.Models;
 using Vonk.Fhir.R3;
 using System;
+using System.Linq;
 
 namespace Visi.Repository
 {
     public class ResourceMapper
     {
+        // Mappings from ViSi model to FHIR resources 
+
         public IResource MapPatient(ViSiPatient source)
         {
             var patient = new Patient
@@ -49,5 +53,45 @@ namespace Visi.Repository
         }
 
         private FhirDateTime ConvertToFhirDT(DateTime dateTime) => new FhirDateTime(new DateTimeOffset(dateTime));
+
+        // Mappings from FHIR resources to ViSi model
+
+        public ViSiPatient MapViSiPatient(IResource source)
+        {
+            var fhirPatient = source.ToPoco<Patient>();
+            var visiPatient = new ViSiPatient();
+
+            if (source.Id != null)
+                visiPatient.Id = int.Parse(source.Id);
+
+            // This code expects all of the values for the non-nullable fields of the database to be present
+            // and as such is not too robust
+            visiPatient.PatientNumber = fhirPatient.Identifier.Find(i => (i.System == "http://mycompany.org/patientnumber")).Value;
+            visiPatient.FirstName = fhirPatient.Name.First().Given.First();
+            visiPatient.FamilyName = fhirPatient.Name.First().Family;
+            visiPatient.DateOfBirth = Convert.ToDateTime(fhirPatient.BirthDate);
+            visiPatient.EmailAddress = fhirPatient.Telecom.Find(t => (t.System == ContactPoint.ContactPointSystem.Email))?.Value;
+
+            return visiPatient;
+        }
+
+        public ViSiBloodPressure MapViSiBloodPressure(IResource source)
+        {
+            var fhirObservation = source.ToPoco<Observation>();
+            var visiBloodPressure = new ViSiBloodPressure();
+
+            if (source.Id != null)
+                visiBloodPressure.Id = int.Parse(source.Id);
+
+            visiBloodPressure.PatientId = int.Parse(new ResourceIdentity(fhirObservation.Subject.Reference).Id);
+            visiBloodPressure.MeasuredAt = Convert.ToDateTime(((FhirDateTime)fhirObservation.Effective).ToString());
+
+            var systolicComponent = fhirObservation.Component.Find(c => c.Code.Coding.Exists(coding => coding.Code == "8480-6"));
+            var diastolicComponent = fhirObservation.Component.Find(c => c.Code.Coding.Exists(coding => coding.Code == "8462-4"));
+            visiBloodPressure.Systolic = Convert.ToInt32(((Quantity)systolicComponent.Value).Value);
+            visiBloodPressure.Diastolic = Convert.ToInt32(((Quantity)diastolicComponent.Value).Value); ;
+
+            return visiBloodPressure;
+        }
     }
 }

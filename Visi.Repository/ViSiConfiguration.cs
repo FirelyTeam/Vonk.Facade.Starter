@@ -14,6 +14,7 @@ namespace Visi.Repository
             services.AddDbContext<ViSiContext>();
             services.AddSingleton<ResourceMapper>();
             services.AddScoped<ISearchRepository, ViSiRepository>();
+            services.AddScoped<IResourceChangeRepository, ViSiChangeRepository>();
 
             services.Configure<DbOptions>(configuration.GetSection(nameof(DbOptions)));
             return services;
