@@ -5,16 +5,14 @@ using System.Threading.Tasks;
 using Vonk.Core.Common;
 using Vonk.Core.Repository;
 using Vonk.Core.Support;
-using Visi.Repository.Models;
+using Vonk.Facade.Starter.Models;
 
-namespace Visi.Repository
+namespace Vonk.Facade.Starter.Repository
 {
     public class ViSiChangeRepository : IResourceChangeRepository
     {
         private readonly ViSiContext _visiContext;
-
         private readonly ResourceMapper _resourceMapper;
-
         public ViSiChangeRepository(ViSiContext visiContext, ResourceMapper resourceMapper)
         {
             Check.NotNull(visiContext, nameof(visiContext));
@@ -22,7 +20,6 @@ namespace Visi.Repository
             _visiContext = visiContext;
             _resourceMapper = resourceMapper;
         }
-
         public async Task<IResource> Create(IResource input)
         {
             switch (input.Type)
@@ -57,7 +54,6 @@ namespace Visi.Repository
             // return the new resource as it was stored by this server
             return _resourceMapper.MapBloodPressure(_visiContext.BloodPressure.Last());
         }
-
         public async Task<IResource> Delete(ResourceKey toDelete)
         {
             switch (toDelete.ResourceType)
@@ -125,7 +121,6 @@ namespace Visi.Repository
                     throw new NotImplementedException($"ResourceType {update.Type} is not supported.");
             }
         }
-
         public async Task<IResource> UpdatePatient(ResourceKey original, IResource update)
         {
             try
