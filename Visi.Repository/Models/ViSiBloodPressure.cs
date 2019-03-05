@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Vonk.Facade.Starter.Models
+namespace Visi.Repository.Models
 {
     public partial class ViSiBloodPressure
     {

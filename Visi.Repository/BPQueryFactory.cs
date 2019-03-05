@@ -3,8 +3,8 @@ using System;
 using System.Linq;
 using Vonk.Core.Repository;
 using Vonk.Facade.Relational;
-using Vonk.Facade.Starter.Models;
-namespace Vonk.Facade.Starter.Repository
+using Visi.Repository.Models;
+namespace Visi.Repository
 {
     public class BloodPressureQuery : RelationalQuery<ViSiBloodPressure>
     {

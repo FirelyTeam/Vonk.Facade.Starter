@@ -1,4 +1,4 @@
-﻿namespace Vonk.Facade.Starter
+﻿namespace Visi.Repository
 {
     public class DbOptions
     {

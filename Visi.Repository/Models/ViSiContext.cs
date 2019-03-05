@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Vonk.Facade.Starter.Models
+namespace Visi.Repository.Models
 {
     public partial class ViSiContext : DbContext
     {
