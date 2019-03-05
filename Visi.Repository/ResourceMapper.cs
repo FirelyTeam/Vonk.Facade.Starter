@@ -23,7 +23,8 @@ namespace Visi.Repository
             };
             patient.Identifier.Add(new Identifier("http://mycompany.org/patientnumber", source.PatientNumber));
             patient.Name.Add(new HumanName().WithGiven(source.FirstName).AndFamily(source.FamilyName));
-            patient.Telecom.Add(new ContactPoint(ContactPoint.ContactPointSystem.Email, ContactPoint.ContactPointUse.Home, source.EmailAddress));
+            if (source.EmailAddress != null)
+                patient.Telecom.Add(new ContactPoint(ContactPoint.ContactPointSystem.Email, ContactPoint.ContactPointUse.Home, source.EmailAddress));
             return patient.ToIResource();
         }
 

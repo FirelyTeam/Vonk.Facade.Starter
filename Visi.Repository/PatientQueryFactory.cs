@@ -5,6 +5,7 @@ using System.Linq;
 using Visi.Repository.Models;
 using Vonk.Core.Repository;
 using Vonk.Facade.Relational;
+using static Vonk.Core.Context.VonkConstants;
 
 namespace Visi.Repository
 {

@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Visi.Repository.Models;
 using Vonk.Core.Common;
 using Vonk.Core.Repository;
 using Vonk.Core.Support;
-using Vonk.Facade.Starter.Models;
 
-namespace Vonk.Facade.Starter.Repository
+namespace Visi.Repository
 {
     public class ViSiChangeRepository : IResourceChangeRepository
     {

@@ -38,7 +38,7 @@ namespace Vonk.Facade.Starter
                 .AddCreateServices()
                 .AddUpdateServices()
                 .AddDeleteServices()
-                .AddViSiServices()
+                .AddViSiServices(_configuration)
                 .AllowResourceTypes("Patient", "Observation")
                 .AddInstanceValidationServices(_configuration)
                 .AddValidationServices(_configuration)
