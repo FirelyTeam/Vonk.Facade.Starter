@@ -1,11 +1,12 @@
 ﻿using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
-using Vonk.Core.Common;
-using Vonk.Core.Context;
-using Visi.Repository.Models;
-using Vonk.Fhir.R3;
+using Hl7.Fhir.Support;
 using System;
 using System.Linq;
+using Visi.Repository.Models;
+using Vonk.Core.Common;
+using Vonk.Core.Context;
+using Vonk.Fhir.R3;
 
 namespace Visi.Repository
 {
@@ -18,7 +19,7 @@ namespace Visi.Repository
             var patient = new Patient
             {
                 Id = source.Id.ToString(),
-                BirthDate = ConvertToFhirDT(source.DateOfBirth).ToString()
+                BirthDate = source.DateOfBirth.ToFhirDate() //Time part is not converted here. Change that if you have it present in the source.
             };
             patient.Identifier.Add(new Identifier("http://mycompany.org/patientnumber", source.PatientNumber));
             patient.Name.Add(new HumanName().WithGiven(source.FirstName).AndFamily(source.FamilyName));
@@ -32,7 +33,7 @@ namespace Visi.Repository
             {
                 Id = bp.Id.ToString(),
                 Subject = new ResourceReference($"Patient/{bp.PatientId}"),
-                Effective = ConvertToFhirDT(bp.MeasuredAt),
+                Effective = new FhirDateTime(new DateTimeOffset(bp.MeasuredAt, TimeSpan.FromHours(2))), //Change to your local offset.
                 Status = ObservationStatus.Final
             };
             observation.Category.Add(new CodeableConcept("http://hl7.org/fhir/observation-category", "vital-signs", "Vital Signs"));
@@ -51,8 +52,6 @@ namespace Visi.Repository
 
             return observation.ToIResource();
         }
-
-        private FhirDateTime ConvertToFhirDT(DateTime dateTime) => new FhirDateTime(new DateTimeOffset(dateTime));
 
         // Mappings from FHIR resources to ViSi model
 
