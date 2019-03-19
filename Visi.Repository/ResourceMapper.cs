@@ -19,7 +19,9 @@ namespace Visi.Repository
             var patient = new Patient
             {
                 Id = source.Id.ToString(),
-                BirthDate = source.DateOfBirth.ToFhirDate() //Time part is not converted here. Change that if you have it present in the source.
+                BirthDate = source.DateOfBirth.ToFhirDate() //Time part is not converted here, since the Birthdate is of type date
+                                                            //If you have it present in the source, and want to communicate it, you
+                                                            //need to add a birthtime extension.
             };
             patient.Identifier.Add(new Identifier("http://mycompany.org/patientnumber", source.PatientNumber));
             patient.Name.Add(new HumanName().WithGiven(source.FirstName).AndFamily(source.FamilyName));
@@ -64,7 +66,7 @@ namespace Visi.Repository
             if (source.Id != null)
                 visiPatient.Id = int.Parse(source.Id);
 
-            // This code expects all of the values for the non-nullable fields of the database to be present
+            // This code expects all of the values for the required fields of the database to be present
             // and as such is not too robust
             visiPatient.PatientNumber = fhirPatient.Identifier.Find(i => (i.System == "http://mycompany.org/patientnumber")).Value;
             visiPatient.FirstName = fhirPatient.Name.First().Given.First();
