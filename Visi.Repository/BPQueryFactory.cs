@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using Vonk.Core.Repository;
-using Vonk.Facade.Relational;
 using Visi.Repository.Models;
+using Vonk.Core.Repository;
+using Vonk.Core.Support;
+using Vonk.Facade.Relational;
+
 namespace Visi.Repository
 {
     public class BloodPressureQuery : RelationalQuery<ViSiBloodPressure>
@@ -25,6 +27,20 @@ namespace Visi.Repository
                 {
                     return PredicateQuery(vp => vp.Id == bpId);
                 }
+            }
+            return base.AddValueFilter(parameterName, value);
+        }
+
+        public override BloodPressureQuery AddValueFilter(string parameterName, ReferenceValue value)
+        {
+            if (parameterName == "subject")
+            {
+                var patIdValue = value.Reference.StripFromStart("Patient/");
+                if (!int.TryParse(patIdValue, out var patId))
+                {
+                    throw new ArgumentException("Patient Id must be an integer value");
+                }
+                return PredicateQuery(bp => bp.PatientId == patId);
             }
             return base.AddValueFilter(parameterName, value);
         }
