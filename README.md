@@ -1,4 +1,6 @@
-[![Build Status](https://firely.visualstudio.com/Vonk.IdentityServer.Test/_apis/build/status/FirelyTeam.Vonk.IdentityServer.Test?branchName=master)](https://firely.visualstudio.com/Vonk.Facade.Starter/_build/latest?definitionId=27&branchName=master)
+|Develop|Master|
+|---|---|
+|[![Build Status](https://firely.visualstudio.com/Vonk.IdentityServer.Test/_apis/build/status/FirelyTeam.Vonk.IdentityServer.Test?branchName=master)](https://firely.visualstudio.com/Vonk.Facade.Starter/_build/latest?definitionId=27&branchName=master)|[![Build Status](https://firely.visualstudio.com/Vonk.IdentityServer.Test/_apis/build/status/FirelyTeam.Vonk.IdentityServer.Test?branchName=develop)](https://firely.visualstudio.com/Vonk.Facade.Starter/_build/latest?definitionId=27&branchName=develop)
 
 # Quick start for building a Vonk Facade
 
