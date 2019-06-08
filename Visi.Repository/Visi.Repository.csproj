@@ -11,7 +11,6 @@
     <PackageReference Include="Vonk.Core" Version="2.0.1" />
     <PackageReference Include="Vonk.Facade.Relational" Version="2.0.1" />
     <PackageReference Include="Vonk.Fhir.R3" Version="2.0.1" />
-    <PackageReference Include="Vonk.Smart" Version="2.0.1" />
   </ItemGroup>
 
 </Project>
