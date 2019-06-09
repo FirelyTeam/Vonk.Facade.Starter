@@ -1,4 +1,14 @@
-﻿using Visi.Repository.Models;
+﻿using Hl7.Fhir.Model;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Visi.Repository.Models;
+using Vonk.Core.Common;
+using Vonk.Core.Context;
+using Vonk.Core.Repository;
+using Vonk.Core.Support;
+using Vonk.Facade.Relational;
 
 namespace Visi.Repository
 {
