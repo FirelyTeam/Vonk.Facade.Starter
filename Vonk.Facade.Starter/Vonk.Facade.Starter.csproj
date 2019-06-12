@@ -6,9 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Vonk.Core" Version="2.0.0" />
-    <PackageReference Include="Vonk.Facade.Relational" Version="2.0.0" />
-    <PackageReference Include="Vonk.Fhir.R3" Version="2.0.0" />
     <PackageReference Include="Vonk.Smart" Version="2.0.0" />
   </ItemGroup>
 
