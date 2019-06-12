@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using Visi.Repository.Models;
 using Vonk.Core.Repository;
+using Vonk.Core.Repository.ResultShaping;
 using Vonk.Core.Support;
 using Vonk.Facade.Relational;
 
@@ -10,6 +11,23 @@ namespace Visi.Repository
 {
     public class BloodPressureQuery : RelationalQuery<ViSiBloodPressure>
     {
+        public BloodPressureQuery() : base() { }
+
+        public BloodPressureQuery(SortShape sort)
+        {
+            _sort = sort;
+        }
+        private readonly SortShape _sort;
+        public override IShapeValue[] Shapes => _sort is null ? base.Shapes :
+            base.Shapes.SafeUnion(new[] { _sort }).ToArray();
+
+        protected override IQueryable<ViSiBloodPressure> HandleShapes(IQueryable<ViSiBloodPressure> source)
+        {
+            var sorted = _sort is null ? source :
+                (_sort.Direction == SortDirection.ascending ? source.OrderBy(vp => vp.Id) :
+                source.OrderByDescending(vp => vp.Id));
+            return base.HandleShapes(sorted);
+        }
     }
     public class BPQueryFactory : RelationalQueryFactory<ViSiBloodPressure, BloodPressureQuery>
     {
@@ -55,6 +73,14 @@ namespace Visi.Repository
                 return PredicateQuery(bp => patIds.Contains(bp.PatientId));
             }
             return base.AddValueFilter(parameterName, value);
+        }
+
+        public override BloodPressureQuery ResultShape(IShapeValue shape)
+        {
+            if (shape is SortShape sort && sort.ParameterName == "_lastUpdated")
+                return new BloodPressureQuery(sort);
+
+            return base.ResultShape(shape);
         }
     }
 }
