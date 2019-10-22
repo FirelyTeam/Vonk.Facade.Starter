@@ -7,9 +7,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.3" />
-    <PackageReference Include="Vonk.Core" Version="2.0.1" />
-    <PackageReference Include="Vonk.Facade.Relational" Version="2.0.1" />
-    <PackageReference Include="Vonk.Fhir.R3" Version="2.0.1" />
+    <PackageReference Include="Vonk.Core" Version="3.0.0" />
+    <PackageReference Include="Vonk.Facade.Relational" Version="3.0.0" />
+    <PackageReference Include="Vonk.Fhir.R3" Version="3.0.0" />
   </ItemGroup>
 
 </Project>
