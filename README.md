@@ -2,7 +2,7 @@
 
 [Vonk FHIR Server](http://fire.ly/vonk) can be used as a FHIR interface to your own data store. To make this happen, you can implement the two interfaces that let the server communicate with the data store.
 
-This project contains an example on how to do this for a fictional relational database. I is meant to accompany the exercise on how to build a Vonk FHIR Facade on the [Vonk documentation](http://docs.simplifier.net/vonk/facade/facade.html).
+This project contains an example on how to do this for a fictional relational database. It is meant to accompany the exercise on how to build a Vonk FHIR Facade on the [Vonk documentation](http://docs.simplifier.net/vonk/facade/facade.html).
 
 |Develop|Master|
 |---|---|
