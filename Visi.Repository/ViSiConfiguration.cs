@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Visi.Repository.Models;
 using Vonk.Core.Pluggability;
+using Vonk.Core.Pluggability.ContextAware;
 using Vonk.Core.Repository;
 
 namespace Visi.Repository
