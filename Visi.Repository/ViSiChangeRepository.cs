@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Visi.Repository.Models;
 using Vonk.Core.Common;
+using Vonk.Core.Pluggability.ContextAware;
 using Vonk.Core.Repository;
 using Vonk.Core.Support;
 
 namespace Visi.Repository
 {
+    [ContextAware(InformationModels = new[] { VonkConstants.Model.FhirR3 })]
     public class ViSiChangeRepository : IResourceChangeRepository
     {
         private readonly ViSiContext _visiContext;
