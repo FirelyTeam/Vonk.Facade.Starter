@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using Visi.Repository.Models;
 using Vonk.Core.Common;
 using Vonk.Core.Context;
+using Vonk.Core.Pluggability.ContextAware;
 using Vonk.Core.Repository;
 using Vonk.Core.Support;
 using Vonk.Facade.Relational;
 
 namespace Visi.Repository
 {
+    [ContextAware(InformationModels = new[] { VonkConstants.Model.FhirR3})]
     public class ViSiSearchRepository : SearchRepository
     {
         private readonly ViSiContext _visiContext;

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Visi.Repository.Models;
 using Vonk.Core.Pluggability;
+using Vonk.Core.Pluggability.ContextAware;
 using Vonk.Core.Repository;
 
 namespace Visi.Repository
@@ -14,8 +15,8 @@ namespace Visi.Repository
         {
             services.AddDbContext<ViSiContext>();
             services.TryAddSingleton<ResourceMapper>();
-            services.TryAddScoped<ISearchRepository, ViSiSearchRepository>();
-            services.TryAddScoped<IResourceChangeRepository, ViSiChangeRepository>();
+            services.TryAddContextAware<ISearchRepository, ViSiSearchRepository>(ServiceLifetime.Scoped);
+            services.TryAddContextAware<IResourceChangeRepository, ViSiChangeRepository>(ServiceLifetime.Scoped);
 
             services.Configure<DbOptions>(configuration.GetSection(nameof(DbOptions)));
             return services;

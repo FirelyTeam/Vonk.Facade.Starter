@@ -7,7 +7,7 @@ using Vonk.Core.Repository;
 using Vonk.Core.Repository.ResultShaping;
 using Vonk.Core.Support;
 using Vonk.Facade.Relational;
-using static Vonk.Core.Context.VonkConstants;
+using static Vonk.Core.Common.VonkConstants;
 
 namespace Visi.Repository
 {
