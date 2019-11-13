@@ -69,7 +69,7 @@ namespace Visi.Repository
             // This code expects all of the values for the required fields of the database to be present
             // and as such is not too robust
             visiPatient.PatientNumber = fhirPatient.Identifier.FirstOrDefault(i => (i.System == "http://mycompany.org/patientnumber"))?.Value;
-            visiPatient.FirstName = fhirPatient.Name.FirstOrDefault()?.Given.First();
+            visiPatient.FirstName = fhirPatient.Name.FirstOrDefault()?.Given?.FirstOrDefault();
             visiPatient.FamilyName = fhirPatient.Name.FirstOrDefault()?.Family;
             visiPatient.DateOfBirth = Convert.ToDateTime(fhirPatient.BirthDate);
             visiPatient.EmailAddress = fhirPatient.Telecom.FirstOrDefault(t => (t.System == ContactPoint.ContactPointSystem.Email))?.Value;
