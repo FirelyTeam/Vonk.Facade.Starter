@@ -29,7 +29,7 @@ namespace Vonk.Facade.Starter
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddFhirR3Services()
+            services.AddFhirR3FacadeServices(_configuration)
                 .AddSmartServices(_configuration, _hostingEnv)
                 .AddVonkMinimalServices()
                 .AddSearchServices()
