@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 using Visi.Repository.Models;
 using Vonk.Core.Repository;
 using Vonk.Core.Repository.ResultShaping;
@@ -11,17 +12,16 @@ using static Vonk.Core.Common.VonkConstants;
 
 namespace Visi.Repository
 {
+    public delegate IQueryable<ViSiPatient> Sort(IQueryable<ViSiPatient> input);
+
     public class PatientQuery : RelationalQuery<ViSiPatient>
     {
         public PatientQuery() : base() { }
 
-        public PatientQuery(SortShape sort)
+        public PatientQuery(Sort sort) : this()
         {
-            _sort = sort;
+            SortOperations = new[] { sort };
         }
-        private readonly SortShape _sort;
-        public override IShapeValue[] Shapes => _sort is null ? base.Shapes :
-            base.Shapes.SafeUnion(new[] { _sort }).ToArray();
 
         protected override IQueryable<ViSiPatient> HandleShapes(IQueryable<ViSiPatient> source)
         {
@@ -29,15 +29,14 @@ namespace Visi.Repository
                 return source;
 
             var sorted = source;
-            foreach (var sortShape in Shapes.OfType<SortShape>())
+            foreach (var sortOp in SortOperations)
             {
-                if (sortShape.ParameterName == "_id")
-                    sorted = sortShape.Direction == SortDirection.ascending ? sorted.OrderBy(vp => vp.Id) : sorted.OrderByDescending(vp => vp.Id);
-                else if (sortShape.ParameterName == "identifier")
-                    sorted = sortShape.Direction == SortDirection.ascending ? sorted.OrderBy(vp => vp.PatientNumber) : sorted.OrderByDescending(vp => vp.PatientNumber);
+                sorted = sortOp(sorted);
             }
             return base.HandleShapes(sorted);
         }
+
+        internal Sort[] SortOperations { get; set; }
     }
 
     public class PatientQueryFactory : RelationalQueryFactory<ViSiPatient, PatientQuery>
@@ -76,18 +75,38 @@ namespace Visi.Repository
             return base.AddValueFilter(parameterName, value);
         }
 
-        private readonly static string[] _supportedSortFields = new[] { "_id", "identifier" };
         public override PatientQuery ResultShape(IShapeValue shape)
         {
             if (shape is SortShape sort)
             {
-                if (!_supportedSortFields.Contains(sort.ParameterName))
+                switch (sort.ParameterName)
                 {
-                    throw new ArgumentException($"Sorting on {sort.ParameterName} is not supported.");
+                    case "_id": return new PatientQuery(input => input.Sort(sort.Direction, (ViSiPatient p) => p.Id));
+                    case "identifier": return new PatientQuery(input => input.Sort(sort.Direction, (ViSiPatient p) => p.PatientNumber));
+                    default:
+                        throw new ArgumentException($"Sorting on {sort.ParameterName} is not supported.");
                 }
-                return new PatientQuery(sort);
             }
             return base.ResultShape(shape);
+        }
+        public override PatientQuery And(PatientQuery left, PatientQuery right)
+        {
+            var result = base.And(left, right);
+            if (result is object)
+            {
+                result.SortOperations =
+                    left is null ? right?.SortOperations
+                        : (right is null ? left?.SortOperations : left.SortOperations.SafeUnion(right.SortOperations)?.ToArray());
+            }
+            return result;
+        }
+    }
+
+    public static class SortExtensions
+    {
+        public static IQueryable<TSource> Sort<TSource, TKey>(this IQueryable<TSource> source, SortDirection direction, Expression<Func<TSource, TKey>> field)
+        {
+            return direction == SortDirection.ascending ? source.OrderBy(field) : source.OrderByDescending(field);
         }
     }
 }
