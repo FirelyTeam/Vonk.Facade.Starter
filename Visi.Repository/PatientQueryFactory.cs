@@ -25,9 +25,17 @@ namespace Visi.Repository
 
         protected override IQueryable<ViSiPatient> HandleShapes(IQueryable<ViSiPatient> source)
         {
-            var sorted = _sort is null ? source :
-                (_sort.Direction == SortDirection.ascending ? source.OrderBy(vp => vp.Id) :
-                source.OrderByDescending(vp => vp.Id));
+            if (Shapes is null)
+                return source;
+
+            var sorted = source;
+            foreach (var sortShape in Shapes.OfType<SortShape>())
+            {
+                if (sortShape.ParameterName == "_id")
+                    sorted = sortShape.Direction == SortDirection.ascending ? sorted.OrderBy(vp => vp.Id) : sorted.OrderByDescending(vp => vp.Id);
+                else if (sortShape.ParameterName == "identifier")
+                    sorted = sortShape.Direction == SortDirection.ascending ? sorted.OrderBy(vp => vp.PatientNumber) : sorted.OrderByDescending(vp => vp.PatientNumber);
+            }
             return base.HandleShapes(sorted);
         }
     }
@@ -68,10 +76,15 @@ namespace Visi.Repository
             return base.AddValueFilter(parameterName, value);
         }
 
+        private readonly static string[] _supportedSortFields = new[] { "_id", "identifier" };
         public override PatientQuery ResultShape(IShapeValue shape)
         {
-            if (shape is SortShape sort && sort.ParameterName == "_lastUpdated")
+            if (shape is SortShape sort)
             {
+                if (!_supportedSortFields.Contains(sort.ParameterName))
+                {
+                    throw new ArgumentException($"Sorting on {sort.ParameterName} is not supported.");
+                }
                 return new PatientQuery(sort);
             }
             return base.ResultShape(shape);
