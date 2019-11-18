@@ -13,33 +13,40 @@ using static Vonk.Core.Common.VonkConstants;
 namespace Visi.Repository
 {
     public delegate IQueryable<ViSiPatient> Sort(IQueryable<ViSiPatient> input);
+    public struct OrderedSort
+    {
+        public OrderedSort(int priority, Sort sort)
+        {
+            Priority = priority;
+            Sort = sort;
+        }
+        public int Priority { get; }
+        public Sort Sort { get; }
+    }
 
     public class PatientQuery : RelationalQuery<ViSiPatient>
     {
         public PatientQuery() : base() { }
 
-        public PatientQuery(Sort sort) : this()
+        public PatientQuery(OrderedSort sort) : this()
         {
             SortOperations = new[] { sort };
         }
 
         protected override IQueryable<ViSiPatient> HandleShapes(IQueryable<ViSiPatient> source)
         {
-            if (Shapes is null)
-                return source;
-
             var sorted = source;
             if (SortOperations.HasAny())
             {
-                foreach (var sortOp in SortOperations)
+                foreach (var sortOp in SortOperations.OrderByDescending(so => so.Priority))
                 {
-                    sorted = sortOp(sorted);
+                    sorted = sortOp.Sort(sorted);
                 }
             }
             return base.HandleShapes(sorted);
         }
 
-        internal Sort[] SortOperations { get; set; }
+        internal OrderedSort[] SortOperations { get; set; }
     }
 
     public class PatientQueryFactory : RelationalQueryFactory<ViSiPatient, PatientQuery>
@@ -84,8 +91,8 @@ namespace Visi.Repository
             {
                 switch (sort.ParameterName)
                 {
-                    case "_id": return new PatientQuery(input => input.Sort(sort.Direction, (ViSiPatient p) => p.Id));
-                    case "identifier": return new PatientQuery(input => input.Sort(sort.Direction, (ViSiPatient p) => p.PatientNumber));
+                    case "_id": return new PatientQuery(new OrderedSort(sort.Priority, input => input.Sort(sort.Direction, (ViSiPatient p) => p.Id)));
+                    case "identifier": return new PatientQuery(new OrderedSort(sort.Priority, input => input.Sort(sort.Direction, (ViSiPatient p) => p.PatientNumber)));
                     default:
                         throw new ArgumentException($"Sorting on {sort.ParameterName} is not supported.");
                 }
