@@ -29,9 +29,12 @@ namespace Visi.Repository
                 return source;
 
             var sorted = source;
-            foreach (var sortOp in SortOperations)
+            if (SortOperations.HasAny())
             {
-                sorted = sortOp(sorted);
+                foreach (var sortOp in SortOperations)
+                {
+                    sorted = sortOp(sorted);
+                }
             }
             return base.HandleShapes(sorted);
         }
