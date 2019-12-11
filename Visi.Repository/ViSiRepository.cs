@@ -1,4 +1,4 @@
-﻿using Hl7.Fhir.Model;
+using Hl7.Fhir.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -54,7 +54,7 @@ namespace Visi.Repository
                     patientResources.Add(_resourceMapper.MapPatient(visiPatient));
                 }
             }
-            return new SearchResult(patientResources, query.GetPageSize(), count);
+            return new SearchResult(patientResources, query.GetPageSize(), count, query.GetSkip());
         }
 
         private async Task<SearchResult> SearchObservation(IArgumentCollection arguments, SearchOptions options)
@@ -72,7 +72,7 @@ namespace Visi.Repository
                     observationResources.Add(_resourceMapper.MapBloodPressure(visiBloodPressure));
                 }
             }
-            return new SearchResult(observationResources, query.GetPageSize(), count);
+            return new SearchResult(observationResources, query.GetPageSize(), count, query.GetSkip());
         }
     }
 }
