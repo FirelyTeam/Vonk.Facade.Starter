@@ -7,7 +7,6 @@ using Vonk.Core.Configuration;
 using Vonk.Core.Operations.Crud;
 using Vonk.Core.Operations.Search;
 using Vonk.Core.Operations.Validation;
-using Vonk.Core.Pluggability;
 using Vonk.Core.Support;
 using Vonk.Fhir.R3;
 using Vonk.Smart;
@@ -30,7 +29,7 @@ namespace Vonk.Facade.Starter
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddFhirServices()
+            services.AddFhirR3FacadeServices(_configuration)
                 .AddSmartServices(_configuration, _hostingEnv)
                 .AddVonkMinimalServices()
                 .AddSearchServices()
@@ -39,7 +38,6 @@ namespace Vonk.Facade.Starter
                 .AddUpdateServices()
                 .AddDeleteServices()
                 .AddViSiServices(_configuration)
-                .AllowResourceTypes("Patient", "Observation")
                 .AddInstanceValidationServices(_configuration)
                 .AddValidationServices(_configuration)
              ;

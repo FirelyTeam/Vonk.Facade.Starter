@@ -1,13 +1,16 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Visi.Repository.Models;
 using Vonk.Core.Common;
+using Vonk.Core.Pluggability.ContextAware;
 using Vonk.Core.Repository;
 using Vonk.Core.Support;
 
 namespace Visi.Repository
 {
+    [ContextAware(InformationModels = new[] { VonkConstants.Model.FhirR3 })]
     public class ViSiChangeRepository : IResourceChangeRepository
     {
         private readonly ViSiContext _visiContext;
@@ -37,7 +40,30 @@ namespace Visi.Repository
             var visiPatient = _resourceMapper.MapViSiPatient(input);
 
             await _visiContext.Patient.AddAsync(visiPatient);
-            await _visiContext.SaveChangesAsync();
+            if (visiPatient.Id < 0) //No Id is assigned yet, let the database create one.
+            {
+                await _visiContext.SaveChangesAsync();
+            }
+            else
+            {
+                using (var transaction = await _visiContext.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        //It can happen that in the database you target, an IDENTITY column is used. You can use a provided id
+                        //by setting IDENTITY_INSERT to ON temporarily.
+                        await _visiContext.Database.ExecuteSqlCommandAsync("SET IDENTITY_INSERT dbo.Patient ON");
+                        await _visiContext.SaveChangesAsync();
+                        await _visiContext.Database.ExecuteSqlCommandAsync("SET IDENTITY_INSERT dbo.Patient OFF");
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw ex;
+                    }
+                }
+            }
 
             // return the new resource as it was stored by this server
             return _resourceMapper.MapPatient(_visiContext.Patient.Last());
@@ -53,8 +79,11 @@ namespace Visi.Repository
             // return the new resource as it was stored by this server
             return _resourceMapper.MapBloodPressure(_visiContext.BloodPressure.Last());
         }
-        public async Task<IResource> Delete(ResourceKey toDelete)
+        public async Task<IResource> Delete(ResourceKey toDelete, string informationModel)
         {
+            //You can ignore the informationModel. 
+            //Because of the informationModel in the ContextAware attribute
+            //on this class, it will only be used in a STU3 context.
             switch (toDelete.ResourceType)
             {
                 case "Patient":
@@ -144,7 +173,23 @@ namespace Visi.Repository
                 var visiBloodPressure = _resourceMapper.MapViSiBloodPressure(update);
 
                 var result = _visiContext.BloodPressure.Update(visiBloodPressure);
-                await _visiContext.SaveChangesAsync();
+                using (var transaction = await _visiContext.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        //It can happen that in the database you target, an IDENTITY column is used. You can use a provided id
+                        //by setting IDENTITY_INSERT to ON temporarily.
+                        await _visiContext.Database.ExecuteSqlCommandAsync("SET IDENTITY_INSERT dbo.Observation ON");
+                        await _visiContext.SaveChangesAsync();
+                        await _visiContext.Database.ExecuteSqlCommandAsync("SET IDENTITY_INSERT dbo.Observation OFF");
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw ex;
+                    }
+                }
 
                 return _resourceMapper.MapBloodPressure(result.Entity);
             }
@@ -153,5 +198,6 @@ namespace Visi.Repository
                 throw new VonkRepositoryException($"Error on update of {original} to {update.Key()}", ex);
             }
         }
+
     }
 }

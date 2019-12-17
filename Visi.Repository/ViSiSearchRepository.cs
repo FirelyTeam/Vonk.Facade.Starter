@@ -2,23 +2,24 @@ using Hl7.Fhir.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Visi.Repository.Models;
 using Vonk.Core.Common;
 using Vonk.Core.Context;
+using Vonk.Core.Pluggability.ContextAware;
 using Vonk.Core.Repository;
 using Vonk.Core.Support;
 using Vonk.Facade.Relational;
-using Visi.Repository.Models;
 
 namespace Visi.Repository
 {
-    public class ViSiRepository : SearchRepository
+    [ContextAware(InformationModels = new[] { VonkConstants.Model.FhirR3})]
+    public class ViSiSearchRepository : SearchRepository
     {
         private readonly ViSiContext _visiContext;
         private readonly ResourceMapper _resourceMapper;
 
-        public ViSiRepository(QueryContext queryBuilderContext, ViSiContext visiContext, ResourceMapper resourceMapper) : base(queryBuilderContext)
+        public ViSiSearchRepository(QueryContext queryBuilderContext, ViSiContext visiContext, ResourceMapper resourceMapper) : base(queryBuilderContext)
         {
             Check.NotNull(visiContext, nameof(visiContext));
             Check.NotNull(resourceMapper, nameof(resourceMapper));
