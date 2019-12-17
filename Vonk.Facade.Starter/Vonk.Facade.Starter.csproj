@@ -6,9 +6,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Vonk.Smart" Version="3.1.0" />
     <PackageReference Include="Hl7.Fhir.Specification.STU3" Version="1.4.0" GeneratePathProperty="true" ExcludeAssets="contentFiles" />
     <!--<PackageReference Include="Hl7.Fhir.Specification.R4" Version="1.4.0" GeneratePathProperty="true" ExcludeAssets="contentFiles" />-->
+    <PackageReference Include="Vonk.Smart" Version="3.1.1" />
   </ItemGroup>
 
   <ItemGroup>
