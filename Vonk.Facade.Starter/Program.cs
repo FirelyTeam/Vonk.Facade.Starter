@@ -23,6 +23,7 @@ namespace Vonk.Facade.Starter
                 config
                     .SetBasePath(hostContext.HostingEnvironment.ContentRootPath)
                     .AddJsonFile(path: "appsettings.json", reloadOnChange: true, optional: true)
+                    .AddJsonFile(path: "appsettings.development.json", reloadOnChange: true, optional: true) //Load debug specific settings. 
                     .AddJsonFile(path: "appsettings.instance.json", reloadOnChange: true, optional: true); //Load instance specific settings. This file is intentionally not included in the Git repository.
             })
             .ConfigureLogging((hostingContext, logging) =>

@@ -3,6 +3,7 @@
 
 # Vonk specific files
 *license*.json
+**/appsettings.instance.json
 
 # User-specific files
 *.suo
