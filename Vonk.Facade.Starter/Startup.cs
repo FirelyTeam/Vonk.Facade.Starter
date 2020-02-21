@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Visi.Repository;
 using Vonk.Core.Configuration;
 using Vonk.Core.Operations.Crud;
@@ -16,9 +17,9 @@ namespace Vonk.Facade.Starter
     public class Startup
     {
         private readonly IConfiguration _configuration;
-        private readonly IHostingEnvironment _hostingEnv;
+        private readonly IWebHostEnvironment _hostingEnv;
 
-        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnv)
+        public Startup(IConfiguration configuration, IWebHostEnvironment hostingEnv)
         {
             Check.NotNull(configuration, nameof(configuration));
             Check.NotNull(hostingEnv, nameof(hostingEnv));
@@ -44,7 +45,7 @@ namespace Vonk.Facade.Starter
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
