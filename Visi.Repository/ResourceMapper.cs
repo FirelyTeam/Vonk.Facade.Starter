@@ -7,8 +7,8 @@ using System.Linq;
 using Visi.Repository.Models;
 using Vonk.Core.Common;
 using Vonk.Core.Context;
-using Vonk.Fhir.R3;
-//using Vonk.Fhir.R4;
+//using Vonk.Fhir.R3;
+using Vonk.Fhir.R4;
 
 namespace Visi.Repository
 {

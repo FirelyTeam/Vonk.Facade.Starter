@@ -9,7 +9,7 @@ using Vonk.Core.Operations.Crud;
 using Vonk.Core.Operations.Search;
 using Vonk.Core.Operations.Validation;
 using Vonk.Core.Support;
-using Vonk.Fhir.R3;
+//using Vonk.Fhir.R3;
 using Vonk.Smart;
 
 namespace Vonk.Facade.Starter

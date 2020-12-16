@@ -16,18 +16,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!--
     <Content Include="$(PkgHl7_Fhir_Specification_STU3)\contentFiles\any\any\specification.zip">
       <Link>specification_Fhir3_0.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
       <Pack>false</Pack>
     </Content>
-<!--    <Content Include="$(PkgHl7_Fhir_Specification_R4)\contentFiles\any\any\specification.zip">
+    -->
+    <Content Include="$(PkgHl7_Fhir_Specification_R4)\contentFiles\any\any\specification.zip">
       <Link>specification_Fhir4_0.zip</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
       <Pack>false</Pack>
     </Content> 
--->         
   </ItemGroup>
 </Project>
