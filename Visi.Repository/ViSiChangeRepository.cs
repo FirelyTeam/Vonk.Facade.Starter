@@ -52,9 +52,9 @@ namespace Visi.Repository
                     {
                         //It can happen that in the database you target, an IDENTITY column is used. You can use a provided id
                         //by setting IDENTITY_INSERT to ON temporarily.
-                        await _visiContext.Database.ExecuteSqlCommandAsync("SET IDENTITY_INSERT dbo.Patient ON");
+                        await _visiContext.Database.ExecuteSqlInterpolatedAsync($"SET IDENTITY_INSERT dbo.Patient ON");
                         await _visiContext.SaveChangesAsync();
-                        await _visiContext.Database.ExecuteSqlCommandAsync("SET IDENTITY_INSERT dbo.Patient OFF");
+                        await _visiContext.Database.ExecuteSqlInterpolatedAsync($"SET IDENTITY_INSERT dbo.Patient OFF");
                         transaction.Commit();
                     }
                     catch (Exception ex)
@@ -179,9 +179,9 @@ namespace Visi.Repository
                     {
                         //It can happen that in the database you target, an IDENTITY column is used. You can use a provided id
                         //by setting IDENTITY_INSERT to ON temporarily.
-                        await _visiContext.Database.ExecuteSqlCommandAsync("SET IDENTITY_INSERT dbo.Observation ON");
+                        await _visiContext.Database.ExecuteSqlInterpolatedAsync($"SET IDENTITY_INSERT dbo.Observation ON");
                         await _visiContext.SaveChangesAsync();
-                        await _visiContext.Database.ExecuteSqlCommandAsync("SET IDENTITY_INSERT dbo.Observation OFF");
+                        await _visiContext.Database.ExecuteSqlInterpolatedAsync($"SET IDENTITY_INSERT dbo.Observation OFF");
                         transaction.Commit();
                     }
                     catch (Exception ex)
