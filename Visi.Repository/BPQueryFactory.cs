@@ -12,7 +12,7 @@ namespace Visi.Repository
     public class BloodPressureQuery : RelationalQuery<ViSiBloodPressure>
     {
     }
-    public class BPQueryFactory : RelationalQueryFactory<ViSiBloodPressure, BloodPressureQuery>
+    public class BPQueryFactory : VisiQueryFactory<ViSiBloodPressure, BloodPressureQuery>
     {
         public BPQueryFactory(DbContext onContext) : base("Observation", onContext) { }
 

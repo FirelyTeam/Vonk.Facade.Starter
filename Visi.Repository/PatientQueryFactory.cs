@@ -14,7 +14,7 @@ namespace Visi.Repository
     {
     }
 
-    public class PatientQueryFactory : RelationalQueryFactory<ViSiPatient, PatientQuery>
+    public class PatientQueryFactory : VisiQueryFactory<ViSiPatient, PatientQuery>
     {
         public PatientQueryFactory(DbContext onContext) : base(nameof(Patient), onContext) { }
 
