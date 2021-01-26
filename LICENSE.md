@@ -1,2 +1,2 @@
 
-Copyright (C) 2017 - 2018
+Copyright (C) Firely 2017 - 2021
