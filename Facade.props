@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <FirelySDKVersion>2.0.2</FirelySDKVersion>
-    <FirelyServerVersion>3.10.0-alpha</FirelyServerVersion>
+    <FirelyServerVersion>4.0.0</FirelyServerVersion>
   </PropertyGroup>
 
 </Project>
