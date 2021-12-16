@@ -57,6 +57,7 @@ namespace Visi.Repository
             switch (parameterName)
             {
                 case "_id": return PredicateQuery(p => (p.Id == null) == isMissing);
+                case "identifier": return PredicateQuery(p => (p.PatientNumber == null) == isMissing);
                 default:
                     throw new ArgumentException($"Filtering for missing values using parameter {parameterName} is not supported.");
             }
