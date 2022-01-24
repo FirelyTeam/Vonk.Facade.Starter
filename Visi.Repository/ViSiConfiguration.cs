@@ -8,7 +8,7 @@ using Vonk.Core.Repository;
 
 namespace Visi.Repository
 {
-    [VonkConfiguration(order: 240)]
+    [VonkConfiguration(order: 210)]
     public static class ViSiConfiguration
     {
         public static IServiceCollection AddViSiServices(this IServiceCollection services, IConfiguration configuration)
