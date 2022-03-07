@@ -45,7 +45,7 @@ namespace Visi.Repository
                 var obsQuery = value.CreateQuery(new BPQueryFactory(OnContext));
                 var obsIds = obsQuery.Execute(OnContext).Select(bp => bp.PatientId);
 
-                return PredicateQuery(p => obsIds.Contains(p.Id));
+                return PredicateQuery(p => obsIds.Contains(p.Id.Value));
             }
             return base.AddValueFilter(parameterName, value);
         }

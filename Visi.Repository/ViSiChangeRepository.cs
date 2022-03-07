@@ -37,47 +37,38 @@ namespace Visi.Repository
 
         private async Task<IResource> CreatePatient(IResource input)
         {
-            var visiPatient = _resourceMapper.MapViSiPatient(input);
-
-            await _visiContext.Patient.AddAsync(visiPatient);
-            if (visiPatient.Id < 0) //No Id is assigned yet, let the database create one.
+            try
             {
-                await _visiContext.SaveChangesAsync();
-            }
-            else
-            {
-                using (var transaction = await _visiContext.Database.BeginTransactionAsync())
-                {
-                    try
-                    {
-                        //It can happen that in the database you target, an IDENTITY column is used. You can use a provided id
-                        //by setting IDENTITY_INSERT to ON temporarily.
-                        await _visiContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Patient ON");
-                        await _visiContext.SaveChangesAsync();
-                        await _visiContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Patient OFF");
-                        transaction.Commit();
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        throw ex;
-                    }
-                }
-            }
+                var visiPatient = _resourceMapper.MapViSiPatient(input);
 
-            // return the new resource as it was stored by this server
-            return _resourceMapper.MapPatient(_visiContext.Patient.Last());
+                var result = await _visiContext.Patient.AddAsync(visiPatient);
+                await Save(visiPatient.Id.HasValue);
+
+                // return the new resource as it was stored by this server
+                return _resourceMapper.MapPatient(result.Entity);
+            }
+            catch (Exception ex)
+            {
+                throw new VonkRepositoryException($"Error on create of Patient", ex);
+            }
         }
 
         private async Task<IResource> CreateObservation(IResource input)
         {
-            var visiBloodPressure = _resourceMapper.MapViSiBloodPressure(input);
+            try
+            {
+                var visiBloodPressure = _resourceMapper.MapViSiBloodPressure(input);
 
-            await _visiContext.BloodPressure.AddAsync(visiBloodPressure);
-            await _visiContext.SaveChangesAsync();
+                var result = await _visiContext.BloodPressure.AddAsync(visiBloodPressure);
+                await Save(visiBloodPressure.Id.HasValue);
 
-            // return the new resource as it was stored by this server
-            return _resourceMapper.MapBloodPressure(_visiContext.BloodPressure.Last());
+                // return the new resource as it was stored by this server
+                return _resourceMapper.MapBloodPressure(result.Entity);
+            }
+            catch (Exception ex)
+            {
+                throw new VonkRepositoryException($"Error on create of Observation", ex);
+            }
         }
         public async Task<IResource> Delete(ResourceKey toDelete, string informationModel)
         {
@@ -106,27 +97,45 @@ namespace Visi.Repository
 
             try
             {
-                _visiContext.Patient.Remove(visiPatient);
+                var result = _visiContext.Patient.Remove(visiPatient);
                 await _visiContext.SaveChangesAsync();
+                return _resourceMapper.MapPatient(result.Entity);
             }
             catch (Exception ex)
             {
                 throw new VonkRepositoryException($"Error on deleting Patient with Id {toDelete_id}", ex);
             }
 
-            return _resourceMapper.MapPatient(visiPatient);
         }
 
         public async Task<IResource> DeleteObservation(ResourceKey toDelete)
         {
-            var visiBloodPressure = _visiContext.BloodPressure.Find(int.Parse(toDelete.ResourceId));
+            int toDelete_id = int.Parse(toDelete.ResourceId);
+            var visiBloodPressure = _visiContext.BloodPressure.Find(toDelete_id);
+            if (visiBloodPressure != null)
+                return null;
 
-            var ox = _visiContext.BloodPressure.Remove(visiBloodPressure);
-            await _visiContext.SaveChangesAsync();
+            try
+            {
+                var result = _visiContext.BloodPressure.Remove(visiBloodPressure);
+                await _visiContext.SaveChangesAsync();
 
-            return _resourceMapper.MapBloodPressure(ox.Entity);
+                return _resourceMapper.MapBloodPressure(result.Entity);
+            }
+            catch (Exception ex)
+            {
+                throw new VonkRepositoryException($"Error on deleting Observation with Id {toDelete_id}", ex);
+            }
         }
 
+        /// <summary>
+        /// This method has to return a value if you want to use it with transactions.
+        /// Transactions can have circular references between resources to be created.
+        /// Therefore Firely Server first needs to retrieve the ids that will be assigned to them
+        /// in order to make the references correct.
+        /// </summary>
+        /// <param name="resourceType"></param>
+        /// <returns></returns>
         public string NewId(string resourceType)
         {
             return null;
@@ -156,7 +165,7 @@ namespace Visi.Repository
                 var visiPatient = _resourceMapper.MapViSiPatient(update);
 
                 var result = _visiContext.Patient.Update(visiPatient);
-                await _visiContext.SaveChangesAsync();
+                await Save();
 
                 return _resourceMapper.MapPatient(result.Entity);
             }
@@ -173,15 +182,33 @@ namespace Visi.Repository
                 var visiBloodPressure = _resourceMapper.MapViSiBloodPressure(update);
 
                 var result = _visiContext.BloodPressure.Update(visiBloodPressure);
+                await Save();
+
+                return _resourceMapper.MapBloodPressure(result.Entity);
+            }
+            catch (Exception ex)
+            {
+                throw new VonkRepositoryException($"Error on update of {original} to {update.Key()}", ex);
+            }
+        }
+
+        private async Task Save(bool hasId = true)
+        {
+            if (!hasId) //No Id is assigned yet, let the database create one.
+            {
+                await _visiContext.SaveChangesAsync();
+            }
+            else
+            {
                 using (var transaction = await _visiContext.Database.BeginTransactionAsync())
                 {
                     try
                     {
                         //It can happen that in the database you target, an IDENTITY column is used. You can use a provided id
                         //by setting IDENTITY_INSERT to ON temporarily.
-                        await _visiContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Observation ON");
+                        await _visiContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Patient ON");
                         await _visiContext.SaveChangesAsync();
-                        await _visiContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Observation OFF");
+                        await _visiContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Patient OFF");
                         transaction.Commit();
                     }
                     catch (Exception ex)
@@ -190,12 +217,6 @@ namespace Visi.Repository
                         throw ex;
                     }
                 }
-
-                return _resourceMapper.MapBloodPressure(result.Entity);
-            }
-            catch (Exception ex)
-            {
-                throw new VonkRepositoryException($"Error on update of {original} to {update.Key()}", ex);
             }
         }
 
