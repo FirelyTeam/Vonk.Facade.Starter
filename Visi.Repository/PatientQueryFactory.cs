@@ -50,6 +50,21 @@ namespace Visi.Repository
             return base.AddValueFilter(parameterName, value);
         }
 
+        public override PatientQuery AddValueFilter(string parameterName, MissingValue value)
+        {
+            var isMissing = value.IsMissing; // true
+
+            switch (parameterName)
+            {
+                //_id is a bit contrived, as Id is never null in Visi, so if isMissing = true, return false, otherwise return true for every record. 
+                case "_id": return PredicateQuery(p => !isMissing);
+                //This is a more real example:
+                case "identifier": return PredicateQuery(p => (p.PatientNumber == null) == isMissing); 
+                default:
+                    throw new ArgumentException($"Filtering for missing values using parameter {parameterName} is not supported.");
+            }
+        }
+
         protected override PatientQuery AddResultShape(SortShape sort)
         {
             switch (sort.ParameterName)
