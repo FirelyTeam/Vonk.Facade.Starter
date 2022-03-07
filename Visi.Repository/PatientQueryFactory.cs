@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Visi.Repository.Models;
 using Vonk.Core.Repository;
 using Vonk.Core.Repository.ResultShaping;
-using Vonk.Core.Support;
 using Vonk.Facade.Relational;
 using static Vonk.Core.Common.VonkConstants;
 
@@ -13,26 +12,9 @@ namespace Visi.Repository
 {
     public class PatientQuery : RelationalQuery<ViSiPatient>
     {
-        public PatientQuery() : base() { }
-
-        public PatientQuery(SortShape sort)
-        {
-            _sort = sort;
-        }
-        private readonly SortShape _sort;
-        public override IShapeValue[] Shapes => _sort is null ? base.Shapes :
-            base.Shapes.SafeUnion(new[] { _sort }).ToArray();
-
-        protected override IQueryable<ViSiPatient> HandleShapes(IQueryable<ViSiPatient> source)
-        {
-            var sorted = _sort is null ? source :
-                (_sort.Direction == SortDirection.ascending ? source.OrderBy(vp => vp.Id) :
-                source.OrderByDescending(vp => vp.Id));
-            return base.HandleShapes(sorted);
-        }
     }
 
-    public class PatientQueryFactory : RelationalQueryFactory<ViSiPatient, PatientQuery>
+    public class PatientQueryFactory : VisiQueryFactory<ViSiPatient, PatientQuery>
     {
         public PatientQueryFactory(DbContext onContext) : base(nameof(Patient), onContext) { }
 
@@ -68,13 +50,30 @@ namespace Visi.Repository
             return base.AddValueFilter(parameterName, value);
         }
 
-        public override PatientQuery ResultShape(IShapeValue shape)
+        public override PatientQuery AddValueFilter(string parameterName, MissingValue value)
         {
-            if (shape is SortShape sort && sort.ParameterName == "_lastUpdated")
+            var isMissing = value.IsMissing; // true
+
+            switch (parameterName)
             {
-                return new PatientQuery(sort);
+                //_id is a bit contrived, as Id is never null in Visi, so if isMissing = true, return false, otherwise return true for every record. 
+                case "_id": return PredicateQuery(p => !isMissing);
+                //This is a more real example:
+                case "identifier": return PredicateQuery(p => (p.PatientNumber == null) == isMissing); 
+                default:
+                    throw new ArgumentException($"Filtering for missing values using parameter {parameterName} is not supported.");
             }
-            return base.ResultShape(shape);
+        }
+
+        protected override PatientQuery AddResultShape(SortShape sort)
+        {
+            switch (sort.ParameterName)
+            {
+                case "_id": return SortQuery(sort, p => p.Id);
+                case "identifier": return SortQuery(sort, p => p.PatientNumber);
+                default:
+                    throw new ArgumentException($"Sorting on {sort.ParameterName} is not supported.");
+            }
         }
     }
 }
