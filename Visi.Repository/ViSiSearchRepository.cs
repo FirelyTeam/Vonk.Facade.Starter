@@ -13,7 +13,7 @@ using Vonk.Facade.Relational;
 
 namespace Visi.Repository
 {
-    [ContextAware(InformationModels = new[] { VonkConstants.Model.FhirR3})]
+    [ContextAware(InformationModels = new[] { VonkConstants.Model.FhirR4})]
     public class ViSiSearchRepository : SearchRepository
     {
         private readonly ViSiContext _visiContext;

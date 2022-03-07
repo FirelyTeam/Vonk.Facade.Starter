@@ -10,7 +10,7 @@ using Vonk.Core.Support;
 
 namespace Visi.Repository
 {
-    [ContextAware(InformationModels = new[] { VonkConstants.Model.FhirR3 })]
+    [ContextAware(InformationModels = new[] { VonkConstants.Model.FhirR4 })]
     public class ViSiChangeRepository : IResourceChangeRepository
     {
         private readonly ViSiContext _visiContext;
