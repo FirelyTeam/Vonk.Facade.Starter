@@ -1,8 +1,8 @@
-using Hl7.Fhir.Model;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Hl7.Fhir.Model;
+using Microsoft.EntityFrameworkCore;
 using Visi.Repository.Models;
 using Vonk.Core.Common;
 using Vonk.Core.Context;
@@ -13,7 +13,7 @@ using Vonk.Facade.Relational;
 
 namespace Visi.Repository
 {
-    [ContextAware(InformationModels = new[] { VonkConstants.Model.FhirR3})]
+    [ContextAware(InformationModels = new[] { VonkConstants.Model.FhirR4})]
     public class ViSiSearchRepository : SearchRepository
     {
         private readonly ViSiContext _visiContext;

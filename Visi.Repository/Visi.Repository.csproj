@@ -18,8 +18,8 @@
     </PackageReference>
     <PackageReference Include="Vonk.Core" Version="$(FirelyServerVersion)" />
     <PackageReference Include="Vonk.Facade.Relational" Version="$(FirelyServerVersion)" />
-    <PackageReference Include="Vonk.Fhir.R3" Version="$(FirelyServerVersion)" />
-    <!--PackageReference Include="Vonk.Fhir.R4 Version="$(FirelyServerVersion)" />-->
+    <!--<PackageReference Include="Vonk.Fhir.R3" Version="$(FirelyServerVersion)" />-->
+    <PackageReference Include="Vonk.Fhir.R4" Version="$(FirelyServerVersion)" />
   </ItemGroup>
 
 </Project>
