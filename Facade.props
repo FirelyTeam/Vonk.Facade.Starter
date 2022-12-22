@@ -1,8 +1,8 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <FirelySDKVersion>3.8.2</FirelySDKVersion>
-    <FirelyServerVersion>4.10.0</FirelyServerVersion>
+    <FirelySDKVersion>4.3.0</FirelySDKVersion>
+    <FirelyServerVersion>5.*-*</FirelyServerVersion>
   </PropertyGroup>
 
 </Project>

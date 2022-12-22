@@ -16,11 +16,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Vonk.Core" Version="$(FirelyServerVersion)" />
+    <PackageReference Include="Vonk.Core"  Version="$(FirelyServerVersion)" />
     <PackageReference Include="Vonk.Facade.Relational" Version="$(FirelyServerVersion)" />
-    <!--<PackageReference Include="Vonk.Fhir.R3" Version="$(FirelyServerVersion)" />-->
-    <PackageReference Include="Vonk.Fhir.R4" Version="$(FirelyServerVersion)" />
+<!--    <PackageReference Include="Hl7.Fhir.Specification.STU3" Version="$(FirelySDKVersion)" />-->
+    <PackageReference Include="Hl7.Fhir.Specification.R4" Version="$(FirelySDKVersion)" />
   </ItemGroup>
 
 </Project>
-
