@@ -16,8 +16,8 @@ stages:
   - template: build.yml@templates  # Template reference
     parameters:
       dotNetCoreVersion: '6.0.x'
-      nuGetServiceConnections: VonkPackageCredentials, GitHub_FirelyTeams_NuGetFeed
-      nuGetSources: --source https://www.myget.org/F/vonk/api/v3/index.json --source https://nuget.pkg.github.com/FirelyTeam/index.json
+      nuGetServiceConnections: GitHub_FirelyTeams_NuGetFeed
+      nuGetSources: --source https://nuget.pkg.github.com/FirelyTeam/index.json
       packageArtifacts: true
       pool:
          vmImage: ubuntu-latest
