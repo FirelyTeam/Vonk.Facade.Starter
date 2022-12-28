@@ -9,7 +9,10 @@ resources:
       type: github
       name: FirelyTeam/azure-pipeline-templates
       endpoint: FirelyTeam
-    
+      
+variables:
+  buildConfiguration: 'Release'
+  
 stages:
 - stage: build
   jobs:
