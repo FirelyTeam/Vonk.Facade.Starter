@@ -3,19 +3,23 @@
 # Add steps that run tests, create a NuGet package, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
-pool:
-  vmImage: 'ubuntu-latest'
-
-variables:
-  buildConfiguration: 'Release'
-
-steps:
-- script: |
-    dotnet build --configuration $(buildConfiguration)
-- task: DotNetCoreCLI@2
-  displayName: Test
-  inputs:
-    command: test
-    projects: |
-     **/*.Test/*.csproj
-    arguments: '--configuration $(BuildConfiguration)  --no-restore --no-build'
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: FirelyTeam/azure-pipeline-templates
+      endpoint: FirelyTeam
+    
+stages:
+- stage: build
+  jobs:
+  - template: build.yml@templates  # Template reference
+    parameters:
+      dotNetCoreVersion: '6.0.x'
+      nuGetServiceConnections: VonkPackageCredentials, GitHub_FirelyTeams_NuGetFeed
+      nuGetSources: --source https://www.myget.org/F/vonk/api/v3/index.json --source https://nuget.pkg.github.com/FirelyTeam/index.json
+      packageArtifacts: true
+      pool:
+         vmImage: ubuntu-latest
+      restoreDependencies: true
+      useVersionSuffix: false 
