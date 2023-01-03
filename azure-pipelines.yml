@@ -1,21 +1,22 @@
-# ASP.NET Core
-# Build and test ASP.NET Core projects targeting .NET Core.
-# Add steps that run tests, create a NuGet package, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
-
-pool:
-  vmImage: 'ubuntu-latest'
-
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: FirelyTeam/azure-pipeline-templates
+      endpoint: FirelyTeam
+      
 variables:
   buildConfiguration: 'Release'
-
-steps:
-- script: |
-    dotnet build --configuration $(buildConfiguration)
-- task: DotNetCoreCLI@2
-  displayName: Test
-  inputs:
-    command: test
-    projects: |
-     **/*.Test/*.csproj
-    arguments: '--configuration $(BuildConfiguration)  --no-restore --no-build'
+  
+stages:
+- stage: build
+  jobs:
+  - template: build.yml@templates  # Template reference
+    parameters:
+      dotNetCoreVersion: '6.0.x'
+      nuGetServiceConnections: GitHub_FirelyTeams_NuGetFeed
+      nuGetSources: --source https://nuget.pkg.github.com/FirelyTeam/index.json
+      pool:
+         vmImage: ubuntu-latest
+      restoreDependencies: true
+      useVersionSuffix: false 
