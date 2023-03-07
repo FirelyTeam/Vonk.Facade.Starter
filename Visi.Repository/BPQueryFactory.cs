@@ -60,14 +60,14 @@ namespace Visi.Repository
 
         protected override BloodPressureQuery AddResultShape(SortShape sort)
         {
-            switch (sort.ParameterName)
+            switch (sort.ParameterCode)
             {
                 case "_lastUpdated":
                     return SortQuery(sort, bp => bp.MeasuredAt);
                 case "_id":
                     return SortQuery(sort, bp => bp.Id);
                 default:
-                    throw new ArgumentException($"Sorting on {sort.ParameterName} is not supported.");
+                    throw new ArgumentException($"Sorting on {sort.ParameterCode} is not supported.");
             }
         }
     }
