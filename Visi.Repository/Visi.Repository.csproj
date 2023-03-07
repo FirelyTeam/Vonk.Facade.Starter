@@ -3,7 +3,7 @@
   <Import Project="..\Facade.props" />
   
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -11,14 +11,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.13">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Vonk.Core"  Version="$(FirelyServerVersion)" />
+    <PackageReference Include="Vonk.Core" Version="$(FirelyServerVersion)" />
+    <PackageReference Include="Vonk.Fhir.R4" Version="$(FirelyServerVersion)" />
+ <!--    <PackageReference Include="Vonk.Fhir.R3" Version="$(FirelyServerVersion)" /> -->
     <PackageReference Include="Vonk.Facade.Relational" Version="$(FirelyServerVersion)" />
-<!--    <PackageReference Include="Hl7.Fhir.Specification.STU3" Version="$(FirelySDKVersion)" />-->
+<!--    <PackageReference Include="Hl7.Fhir.Specification.STU3" Version="$(FirelySDKVersion)" /> -->
     <PackageReference Include="Hl7.Fhir.Specification.R4" Version="$(FirelySDKVersion)" />
   </ItemGroup>
 

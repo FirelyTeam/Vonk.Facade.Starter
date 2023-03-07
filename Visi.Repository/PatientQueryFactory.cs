@@ -3,10 +3,10 @@ using System.Linq;
 using Hl7.Fhir.Model;
 using Microsoft.EntityFrameworkCore;
 using Visi.Repository.Models;
+using Vonk.Core.Common;
 using Vonk.Core.Repository;
 using Vonk.Core.Repository.ResultShaping;
 using Vonk.Facade.Relational;
-using static Vonk.Core.Common.VonkConstants;
 
 namespace Visi.Repository
 {
@@ -20,7 +20,7 @@ namespace Visi.Repository
 
         public override PatientQuery AddValueFilter(string parameterName, TokenValue value)
         {
-            if (parameterName == ParameterNames.Id)
+            if (parameterName == VonkConstants.ParameterCodes.Id)
             {
                 if (!long.TryParse(value.Code, out long patientId))
                 {
@@ -67,12 +67,12 @@ namespace Visi.Repository
 
         protected override PatientQuery AddResultShape(SortShape sort)
         {
-            switch (sort.ParameterName)
+            switch (sort.ParameterCode)
             {
                 case "_id": return SortQuery(sort, p => p.Id);
                 case "identifier": return SortQuery(sort, p => p.PatientNumber);
                 default:
-                    throw new ArgumentException($"Sorting on {sort.ParameterName} is not supported.");
+                    throw new ArgumentException($"Sorting on {sort.ParameterCode} is not supported.");
             }
         }
     }
