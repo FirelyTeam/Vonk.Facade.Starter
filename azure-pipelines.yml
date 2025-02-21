@@ -4,6 +4,7 @@ resources:
       type: github
       name: FirelyTeam/azure-pipeline-templates
       endpoint: FirelyTeam
+      ref: refs/tags/v1
       
 variables:
   buildConfiguration: 'Release'
