@@ -200,22 +200,20 @@ namespace Visi.Repository
             }
             else
             {
-                using (var transaction = await _visiContext.Database.BeginTransactionAsync())
+                await using var transaction = await _visiContext.Database.BeginTransactionAsync();
+                try
                 {
-                    try
-                    {
-                        //It can happen that in the database you target, an IDENTITY column is used. You can use a provided id
-                        //by setting IDENTITY_INSERT to ON temporarily.
-                        await _visiContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Patient ON");
-                        await _visiContext.SaveChangesAsync();
-                        await _visiContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Patient OFF");
-                        transaction.Commit();
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        throw ex;
-                    }
+                    //It can happen that in the database you target, an IDENTITY column is used. You can use a provided id
+                    //by setting IDENTITY_INSERT to ON temporarily.
+                    await _visiContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Patient ON");
+                    await _visiContext.SaveChangesAsync();
+                    await _visiContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Patient OFF");
+                    await transaction.CommitAsync();
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
                 }
             }
         }
