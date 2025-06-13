@@ -112,7 +112,7 @@ namespace Visi.Repository
         {
             int toDelete_id = int.Parse(toDelete.ResourceId);
             var visiBloodPressure = _visiContext.BloodPressure.Find(toDelete_id);
-            if (visiBloodPressure != null)
+            if (visiBloodPressure is null)
                 return null;
 
             try
@@ -205,9 +205,33 @@ namespace Visi.Repository
                 {
                     //It can happen that in the database you target, an IDENTITY column is used. You can use a provided id
                     //by setting IDENTITY_INSERT to ON temporarily.
-                    await _visiContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Patient ON");
+                    
+                    // Check which entities are being tracked for add/update
+                    var hasPatientChanges = _visiContext.ChangeTracker.Entries<ViSiPatient>()
+                        .Any(e => e.State == EntityState.Added || e.State == EntityState.Modified);
+                    var hasBloodPressureChanges = _visiContext.ChangeTracker.Entries<ViSiBloodPressure>()
+                        .Any(e => e.State == EntityState.Added || e.State == EntityState.Modified);
+                    
+                    if (hasPatientChanges)
+                    {
+                        await _visiContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Patient ON");
+                    }
+                    if (hasBloodPressureChanges)
+                    {
+                        await _visiContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.BloodPressure ON");
+                    }
+                    
                     await _visiContext.SaveChangesAsync();
-                    await _visiContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Patient OFF");
+                    
+                    if (hasPatientChanges)
+                    {
+                        await _visiContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.Patient OFF");
+                    }
+                    if (hasBloodPressureChanges)
+                    {
+                        await _visiContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT dbo.BloodPressure OFF");
+                    }
+                    
                     await transaction.CommitAsync();
                 }
                 catch (Exception)

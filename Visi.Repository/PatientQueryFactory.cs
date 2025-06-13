@@ -26,15 +26,13 @@ namespace Visi.Repository
                 {
                     throw new ArgumentException("Patient Id must be an integer value.");
                 }
-                else
-                {
-                    return PredicateQuery(vp => vp.Id == patientId);
-                }
+                return PredicateQuery(vp => vp.Id == patientId);
             }
             else if (parameterName == "identifier")
             {
                 return PredicateQuery(vp => vp.PatientNumber == value.Code);
             }
+            
             return base.AddValueFilter(parameterName, value);
         }
 
@@ -57,7 +55,7 @@ namespace Visi.Repository
             switch (parameterName)
             {
                 //_id is a bit contrived, as Id is never null in Visi, so if isMissing = true, return false, otherwise return true for every record. 
-                case "_id": return PredicateQuery(p => !isMissing);
+                case VonkConstants.ParameterCodes.Id: return PredicateQuery(p => !isMissing);
                 //This is a more real example:
                 case "identifier": return PredicateQuery(p => (p.PatientNumber == null) == isMissing); 
                 default:
@@ -69,7 +67,7 @@ namespace Visi.Repository
         {
             switch (sort.ParameterCode)
             {
-                case "_id": return SortQuery(sort, p => p.Id);
+                case VonkConstants.ParameterCodes.Id: return SortQuery(sort, p => p.Id);
                 case "identifier": return SortQuery(sort, p => p.PatientNumber);
                 default:
                     throw new ArgumentException($"Sorting on {sort.ParameterCode} is not supported.");
