@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Visi.Repository.Models;
+using Vonk.Core.Common;
 using Vonk.Core.Repository;
 using Vonk.Core.Repository.ResultShaping;
 using Vonk.Core.Support;
@@ -18,17 +19,15 @@ namespace Visi.Repository
 
         public override BloodPressureQuery AddValueFilter(string parameterName, TokenValue value)
         {
-            if (parameterName == "_id")
+            if (parameterName == VonkConstants.ParameterCodes.Id)
             {
                 if (!long.TryParse(value.Code, out long bpId))
                 {
                     throw new ArgumentException("BloodPressure Id must be an integer value.");
                 }
-                else
-                {
-                    return PredicateQuery(vp => vp.Id == bpId);
-                }
+                return PredicateQuery(vp => vp.Id.HasValue && vp.Id.Value == bpId);
             }
+            
             return base.AddValueFilter(parameterName, value);
         }
 
@@ -62,9 +61,9 @@ namespace Visi.Repository
         {
             switch (sort.ParameterCode)
             {
-                case "_lastUpdated":
+                case VonkConstants.ParameterCodes.LastUpdated:
                     return SortQuery(sort, bp => bp.MeasuredAt);
-                case "_id":
+                case VonkConstants.ParameterCodes.Id:
                     return SortQuery(sort, bp => bp.Id);
                 default:
                     throw new ArgumentException($"Sorting on {sort.ParameterCode} is not supported.");
